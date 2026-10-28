@@ -2,7 +2,7 @@
 
 #define LED_EXTERN 7
 #define LED_EXTERN2 8
-#define THRESHOLD 60
+#define THRESHOLD 2000
 bool bPrevTouched = false;
 int iOn = LOW;
 int iFlash = LOW;
@@ -23,6 +23,7 @@ void setup()
 {
    // Leave the auto calibrate at the default 20 second intervals
    //cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);     // turn off autocalibrate on channel 1 - just as an example
+   cs_4_2.set_CS_AutocaL_Millis(20000);
    Serial.begin(9600);
 
    pinMode( LED_EXTERN , OUTPUT );
@@ -35,7 +36,7 @@ void setup()
 void loop()                    
 {
     long start = millis();
-    long total1 =  cs_4_2.capacitiveSensorRaw(30);
+    long total1 =  cs_4_2.capacitiveSensor(255);
 
     Serial.print(millis() - start);        // check on performance in milliseconds
     Serial.print("\t");                    // tab character for debug windown spacing
@@ -49,7 +50,6 @@ void loop()
         iOn = iOn == HIGH ? LOW : HIGH;
         digitalWrite(LED_EXTERN, iOn);
         delay(50);
-        cs_4_2.reset_CS_AutoCal();
     }
 
     bPrevTouched = bTouched;
